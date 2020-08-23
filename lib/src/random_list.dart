@@ -37,24 +37,28 @@ class _RandomListState extends State<RandomList> {
   }
 
   Widget _buildList() {
-    return ListView.builder(itemBuilder: (context, index) {
-      if (index.isOdd) {
-        return Divider();
-      }
+    return Observer(
+      builder: (_){
+        return ListView.builder(itemBuilder: (context, index) {
+          if (index.isOdd) {
+            return Divider();
+          }
 
-      var realIndex = index ~/ 2;
+          var realIndex = index ~/ 2;
 
-      if (realIndex >= _suggestions.length) {
-        _suggestions.addAll(generateWordPairs().take(10));
-      }
-      return Observer(
-        builder: (_) =>_buildRow(_suggestions[realIndex]),
-      );
-    });
+          if (realIndex >= _suggestions.length) {
+            _suggestions.addAll(generateWordPairs().take(10));
+          }
+          return _buildRow(_suggestions[realIndex]);
+        });
+      },
+    );
   }
 
   Widget _buildRow(WordPair pair) {
     final bool alreadySaved = saved_data_object.saved_data.contains(pair);
+
+    print('build row가 호출됩니다');
 
     return ListTile(
       title: Text(
